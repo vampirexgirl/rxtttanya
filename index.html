@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For You, Sreshta ❤️</title>
+  <style>
+    :root {
+      --bg-start: #141e30;
+      --bg-end: #243b55;
+      --sorry-bg: rgba(255, 255, 255, 0.05);
+      --sorry-shadow: rgba(0,0,0,0.5);
+      --love-bg-start: #ff9a9e;
+      --love-bg-end: #fad0c4;
+      --love-color: #4b003f;
+      --button-bg: #e17055;
+      --button-hover-bg: #d63031;
+      --button-shadow: rgba(255, 118, 117, 0.7);
+      --pink: #ff6f91;
+      --pink-dark: #d76d77;
+      --pink-glow: rgba(255, 105, 180, 0.6);
+      --typewriter-border: #ff1493;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -10;
+      pointer-events: none;
+    }
+
+    .parallax {
+      background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -9;
+      animation: scroll 60s linear infinite;
+    }
+
+    @keyframes scroll {
+      0% { background-position: 0 0; }
+      100% { background-position: 1000px 1000px; }
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 50px auto 40px auto;
+      padding: 30px;
+      background: var(--sorry-bg);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px var(--sorry-shadow);
+      animation: fadeIn 1.5s ease forwards;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      user-select: none;
+    }
+
+    .container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .accept-button, #showVideoBtn {
+      padding: 14px 30px;
+      font-size: 1.2rem;
+      background-color: var(--button-bg);
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      color: white;
+      box-shadow: 0 0 20px var(--button-shadow);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      margin-top: 20px;
+      outline-offset: 2px;
+    }
+
+    .accept-button:hover, #showVideoBtn:hover,
+    .accept-button:focus-visible, #showVideoBtn:focus-visible {
+      transform: scale(1.05);
+      background-color: var(--button-hover-bg);
+      outline: 2px solid #fff;
+    }
+
+    #sorrySection .cute-cat {
+      width: 120px;
+      height: 120px;
+      margin: 25px auto 35px auto;
+      background: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDIzeXo2Y3htYmlia3RxcTRvbzZ4OHR3OWJqZXllYjZtd2dncXFsOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ysp6c2yH1U6Tvi5APK/giphy.gif') no-repeat center center / contain;
+      animation: floatUpDown 3s ease-in-out infinite;
+      position: relative;
+    }
+
+    
+
+    /* Sparkle effect on cat */
+    #sorrySection .cute-cat::before, #sorrySection .cute-cat::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: radial-gradient(circle at center, #ff94c2 0%, transparent 80%);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: sparkle 4s linear infinite;
+      pointer-events: none;
+    }
+
+    #sorrySection .cute-cat::before {
+      top: 10px;
+      left: 20px;
+      animation-delay: 0s;
+    }
+
+    #sorrySection .cute-cat::after {
+      top: 60px;
+      right: 15px;
+      animation-delay: 2s;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 0; transform: scale(0.5); }
+    }
+
+    @keyframes floatUpDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    #loveSection {
+      display: none;
+      background: linear-gradient(135deg, var(--love-bg-start), var(--love-bg-end));
+      color: var(--love-color);
+      box-shadow: 0 0 25px var(--pink-glow);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 850px;
+      margin: 50px auto 40px auto;
+      user-select: none;
+    }
+
+    #loveSection.show {
+      display: block;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    .typewriter-text {
+      font-weight: 600;
+      font-size: 1.8rem;
+      border-right: 3px solid var(--typewriter-border);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 3.5s steps(30) forwards, blink 1s step-end infinite;
+      color: #6a006a;
+      margin-bottom: 30px;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: var(--typewriter-border); }
+      50% { border-color: transparent; }
+    }
+
+    .flip-card {
+      background-color: transparent;
+      width: 280px;
+      height: 140px;
+      perspective: 1000px;
+      margin: 30px auto 0 auto;
+      cursor: pointer;
+      border-radius: 15px;
+      user-select: none;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.7s;
+      transform-style: preserve-3d;
+      border-radius: 15px;
+      box-shadow: 0 0 15px var(--pink-glow);
+    }
+
+    .flip-card:hover .flip-card-inner,
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden; /* Safari */
+      backface-visibility: hidden;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.25rem;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .flip-card-front {
+      background-color: var(--pink);
+      color: white;
+    }
+
+    .flip-card-back {
+      background-color: var(--pink-dark);
+      color: white;
+      transform: rotateY(180deg);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    #showVideoBtn {
+      margin-top: 40px;
+    }
+
+    #videoSection {
+      display: none;
+      margin-top: 30px;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 0 20px var(--button-shadow);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #videoSection.show {
+      display: block;
+      opacity: 1;
+    }
+
+    #videoSection video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 15px;
+    }
+
+    audio {
+      display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .typewriter-text { font-size: 1.2rem; }
+      .container, #loveSection {
+        padding: 20px;
+        margin: 30px 15px;
+      }
+      .flip-card {
+        width: 90%;
+        height: 130px;
+      }
+      .flip-card-front, .flip-card-back {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+
+
+  <main>
+    <section id="sorrySection" class="container show" aria-live="polite" aria-label="Apology message section">
+      <h2 style="color: #ff7675;">I'm Really Sorry Sreshta... 💔</h2>
+      <p style="font-size: 1.2rem; line-height: 1.6;">
+        I may have messed up, fallen short, or hurt you unintentionally. But my heart has always cared for you deeply.
+        Please forgive me, Sreshta... you're my peace in chaos. 🥺💖
+      </p>
+      <div class="cute-cat" aria-hidden="true"></div>
+      <button 
+        class="accept-button" 
+        onclick="acceptApology()" 
+        aria-label="Accept the apology"
+        onkeydown="if(event.key==='Enter' || event.key===' ') acceptApology()"
+        >
+        Click to Accept My Apology 💖
+      </button>
+    </section>
+
+    <section id="loveSection" class="container" aria-live="polite" aria-label="Love message section" tabindex="-1">
+      <div class="typewriter-text" aria-label="Love message typed out">Hi Sreshta... you're my everything ❤️</div>
+
+      <div style="margin-top: 30px; font-size: 1.15rem; line-height: 1.6; color: #4b003f;">
+        <p>From the moment we started talking, my world changed for the better.</p>
+        <p>Your smile, your words, your presence — it's all magic to me.</p>
+        <p>I promise to be better, to love you harder, and never take you for granted again. 💞</p>
+      </div>
+
+      <div class="flip-card" tabindex="0" role="button" aria-pressed="false" aria-label="Flip card for surprise message" onkeydown="if(event.key==='Enter' || event.key===' ') toggleFlipCard(this)" onclick="toggleFlipCard(this)">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            Hover or Tap here for a surprise 💌
+          </div>
+          <div class="flip-card-back">
+            Tum ho toh sab kuch hai... Tum nahi toh kuch bhi nahi ❤️
+          </div>
+        </div>
+      </div>
+
+      <button 
+        id="showVideoBtn" 
+        onclick="showVideo()" 
+        aria-label="Watch our video" 
+        onkeydown="if(event.key==='Enter' || event.key===' ') showVideo()"
+      >
+        Watch Our Video 🎥
+      </button>
+
+      <div id="videoSection" aria-live="polite" aria-label="Video section">
+        <video id="loveVideo" controls preload="metadata" tabindex="0">
+          <source src="your-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </section>
+  </main>
+
+  <audio id="bgMusic" src="your-music.mp3" loop></audio>
+
+  <script>
+    // Canvas setup
+    const canvas = document.getElementById('heartCanvas');
+    const ctx = canvas.getContext('2d');
+    let hearts = [];
+
+    // Resize canvas function with throttle
+    let resizeTimeout;
+    function resizeCanvas() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }, 150);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Heart class with smooth shape and glow
+    class Heart {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + Math.random() * 100;
+        this.size = Math.random() * 10 + 10;
+        this.speed = Math.random() * 1 + 0.5;
+        this.opacity = Math.random() * 0.5 + 0.5;
+        this.angle = Math.random() * Math.PI * 2;
+        this.angleSpeed = (Math.random() - 0.5) * 0.02;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = 'pink';
+        ctx.shadowColor = 'rgba(255,105,180,0.6)';
+        ctx.shadowBlur = 8;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-this.size / 2, -this.size / 2,
+                          -this.size, this.size / 3,
+                          0, this.size);
+        ctx.bezierCurveTo(this.size, this.size / 3,
+                          this.size / 2, -this.size / 2,
+                          0, 0);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      update() {
+        this.y -= this.speed;
+        this.angle += this.angleSpeed;
+      }
+    }
+
+    // Create hearts, max 120 at a time
+    function createHearts() {
+      if (hearts.length < 120) {
+        hearts.push(new Heart());
+      }
+    }
+
+    // Animation loop
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      hearts.forEach((heart, index) => {
+        heart.update();
+        heart.draw();
+        if (heart.y < -20) hearts.splice(index, 1);
+      });
+      createHearts();
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Apology acceptance handler
+    function acceptApology() {
+      const sorry = document.getElementById('sorrySection');
+      const love = document.getElementById('loveSection');
+      const bgMusic = document.getElementById('bgMusic');
+
+      sorry.classList.remove('show');
+      setTimeout(() => {
+        sorry.style.display = 'none';
+        love.style.display = 'block';
+        love.classList.add('show');
+        love.focus();
+        bgMusic.play().catch(() => { /* autoplay might be blocked; ignore */ });
+        explodeHearts();
+      }, 600);
+    }
+
+    // Explode hearts animation from center
+    function explodeHearts() {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      for (let i = 0; i < 40; i++) {
+        let spark = new Heart();
+        spark.x = centerX;
+        spark.y = centerY;
+        spark.size = Math.random() * 15 + 5;
+        spark.speed = Math.random() * 4 + 2;
+        spark.angleSpeed = 0;
+        // Randomize direction for explosion effect
+        let angle = Math.random() * 2 * Math.PI;
+        let speed = spark.speed;
+        spark.update = function() {
+          this.x += Math.cos(angle) * speed;
+          this.y += Math.sin(angle) * speed;
+          this.opacity -= 0.02;
+        };
+        hearts.push(spark);
+      }
+    }
+
+    // Show video with fade-in and scroll
+    function showVideo() {
+      const videoSection = document.getElementById('videoSection');
+      const video = document.getElementById('loveVideo');
+      const showBtn = document.getElementById('showVideoBtn');
+
+      videoSection.style.display = 'block';
+      // Trigger fade in by adding class on next tick
+      setTimeout(() => {
+        videoSection.classList.add('show');
+        video.play();
+        video.focus();
+        showBtn.style.display = 'none';
+        // Smooth scroll to video
+        videoSection.scrollIntoView({ behavior: 'smooth' });
+      }, 10);
+    }
+
+    // Flip card toggle for mobile and keyboard
+    function toggleFlipCard(card) {
+      card.classList.toggle('flipped');
+      // Update aria-pressed for accessibility
+      const pressed = card.getAttribute('aria-pressed') === 'true';
+      card.setAttribute('aria-pressed', !pressed);
+    }
+
+     // Particle motion background
+const particleCanvas = document.getElementById("particleCanvas");
+const pctx = particleCanvas.getContext("2d");
+let particles = [];
+
+function resizeParticleCanvas() {
+  particleCanvas.width = window.innerWidth;
+  particleCanvas.height = window.innerHeight;
+}
+resizeParticleCanvas();
+window.addEventListener("resize", resizeParticleCanvas);
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * particleCanvas.width;
+    this.y = Math.random() * particleCanvas.height;
+    this.radius = Math.random() * 1.8 + 1;
+    this.speedX = Math.random() * 0.6 - 0.3;
+    this.speedY = Math.random() * 0.6 - 0.3;
+    this.opacity = Math.random() * 0.5 + 0.3;
+  }
+
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > particleCanvas.width || this.y < 0 || this.y > particleCanvas.height) {
+      this.x = Math.random() * particleCanvas.width;
+      this.y = Math.random() * particleCanvas.height;
+    }
+  }
+
+  draw() {
+    pctx.beginPath();
+    pctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    pctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+    pctx.fill();
+  }
+}
+
+for (let i = 0; i < 150; i++) {
+  particles.push(new Particle());
+}
+
+function animateParticles() {
+  pctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+  particles.forEach((p) => {
+    p.update();
+    p.draw();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+  </script>
+</body>
+</html>
