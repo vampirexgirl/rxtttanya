@@ -357,6 +357,14 @@
 
   <audio id="bgMusic" src="your-music.mp3" loop></audio>
 
+  <button 
+    id="musicToggleBtn" 
+    onclick="toggleMusic()" 
+    style="position: fixed; bottom: 20px; right: 20px; z-index: 999; background-color: #ff6f91; color: white; border: none; padding: 12px 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); cursor: pointer;">
+    🔈
+</button>
+
+
   <script>
     // Canvas setup
     const canvas = document.getElementById('heartCanvas');
@@ -552,5 +560,44 @@ function animateParticles() {
 }
 animateParticles();
   </script>
+
+  <script>
+  const bgMusic = document.getElementById('bgMusic');
+  const video = document.getElementById('loveVideo');
+  const musicToggleBtn = document.getElementById('musicToggleBtn');
+  let isMusicPlaying = true;
+
+  // Pause music when video starts
+  if (video) {
+    video.addEventListener('play', () => {
+      if (!bgMusic.paused) {
+        bgMusic.pause();
+        isMusicPlaying = false;
+        updateMusicToggleButton();
+      }
+    });
+  }
+
+  // Toggle music on button click
+  function toggleMusic() {
+    if (bgMusic.paused) {
+      bgMusic.play().then(() => {
+        isMusicPlaying = true;
+        updateMusicToggleButton();
+      }).catch(() => {
+        alert("Autoplay might be blocked. Click the page once and try again.");
+      });
+    } else {
+      bgMusic.pause();
+      isMusicPlaying = false;
+      updateMusicToggleButton();
+    }
+  }
+
+  function updateMusicToggleButton() {
+    musicToggleBtn.textContent = isMusicPlaying ? "🔈" : "🔇";
+  }
+</script>
+
 </body>
 </html>
